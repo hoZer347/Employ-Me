@@ -2,6 +2,11 @@
 
 A Vite + TypeScript + Tailwind CSS single-page app, deployed on Netlify.
 
+## Links
+
+- **Live site:** [liambrown-website.netlify.app](https://liambrown-website.netlify.app)
+- **Netlify dashboard:** [app.netlify.com/projects/liambrown-website](https://app.netlify.com/projects/liambrown-website)
+
 ## Development
 
 ```bash
