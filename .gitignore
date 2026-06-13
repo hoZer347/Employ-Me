@@ -4,6 +4,10 @@ node_modules/
 # Build output
 dist/
 
+# Vanguards Unity WebGL build (~97 MB) — served locally in dev, hosted
+# elsewhere for prod. Remove this line when intentionally committing it.
+/Vanguards Build/
+
 # Local env files
 .env
 .env.*

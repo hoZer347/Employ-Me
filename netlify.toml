@@ -3,8 +3,33 @@
   command = "npm run build"
   publish = "dist"
 
+# The Vanguards Unity WebGL build ships its big assets Brotli-precompressed
+# (.br). Netlify passes .br through untouched, so we declare the encoding here
+# and pin the *decoded* Content-Type; the browser then transparently
+# decompresses and Unity's loader receives the bytes it expects. The companion
+# bundler in vite.config.ts ships these files as-is (it only decodes .gz). The
+# .loader.js is uncompressed and needs no header.
+[[headers]]
+  for = "/vanguards-build/Build/vanguards.data.br"
+  [headers.values]
+    Content-Encoding = "br"
+    Content-Type = "application/octet-stream"
+
+[[headers]]
+  for = "/vanguards-build/Build/vanguards.framework.js.br"
+  [headers.values]
+    Content-Encoding = "br"
+    Content-Type = "application/javascript"
+
+[[headers]]
+  for = "/vanguards-build/Build/vanguards.wasm.br"
+  [headers.values]
+    Content-Encoding = "br"
+    Content-Type = "application/wasm"
+
 # SPA fallback: serve index.html for any route so client-side
-# navigation works on direct loads / refreshes.
+# navigation works on direct loads / refreshes. Not forced, so the real
+# /vanguards-build/* static assets above are served directly, not rewritten.
 [[redirects]]
   from = "/*"
   to = "/index.html"

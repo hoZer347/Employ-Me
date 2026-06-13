@@ -1,1 +1,9 @@
 @import "tailwindcss";
+
+/* Slightly-blue black backdrop behind the matrix canvas (slate-950).
+   Set on <html> ONLY: a background here propagates to the viewport and
+   paints beneath the negative z-index canvas. Adding it to <body> too
+   would make the body's background paint OVER the canvas and hide it. */
+html {
+  background-color: #020617;
+}
