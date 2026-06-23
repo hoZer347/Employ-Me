@@ -5,11 +5,30 @@ import path from "node:path";
 import zlib from "node:zlib";
 import { pipeline } from "node:stream/promises";
 
-// TEMPORARY: the Vanguards Unity WebGL build lives in the repo folder but is
-// git-ignored (~100 MB) and served by this dev middleware under
-// /vanguards-build (the themed /vanguards loader page frames it). Later it
-// moves to a real host (Netlify game site / GitHub Pages) and this can go.
-const VANGUARDS_DIR = path.resolve(import.meta.dirname, "Vanguards Build");
+// Each game is a Unity WebGL build served same-origin from this site. In dev a
+// middleware streams it straight from its repo folder; in prod the bundler
+// copies it into dist. The builds are git-ignored (large binaries), so this
+// list is the single source of truth. Two shapes:
+//
+//   wrapper: true  → a themed loader page at /<slug>/ frames the build (served
+//                    from /<slug>-build) in an iframe with a Back-to-portfolio
+//                    header. Needs a <slug>/index.html loader page + src entry.
+//   wrapper: false → the build IS the page at /<slug>/ (no themed chrome). Use
+//                    this when the build folder is itself named <slug>.
+interface Game {
+  slug: string; // URL slug and deployed asset-name prefix
+  dir: string; // build folder name in the repo root
+  wrapper: boolean;
+}
+const GAMES: Game[] = [
+  { slug: "vanguards", dir: "Vanguards Build", wrapper: true },
+  { slug: "gobspin", dir: "Gobspin Build", wrapper: true },
+];
+const gameDir = (game: Game) => path.resolve(import.meta.dirname, game.dir);
+// Where the build is served/emitted: a sibling /<slug>-build for wrapper games
+// (so /<slug>/ is free for the loader page), or /<slug> itself for direct ones.
+const gameBase = (game: Game) =>
+  game.wrapper ? `${game.slug}-build` : game.slug;
 
 // Precompressed Unity assets → the encoding the browser should decompress.
 const ENCODING: Record<string, string> = { ".br": "br", ".gz": "gzip" };
@@ -26,33 +45,52 @@ const CONTENT_TYPE: Record<string, string> = {
   ".png": "image/png",
 };
 
-function serveVanguards(): Plugin {
+// version.json drives the loader's cache-busting ?v=; derive it from the newest
+// file in the build so it tracks the actual game assets. (Keying off index.html
+// is unreliable — Unity often doesn't rewrite it on a rebuild, so the version
+// would read stale even though Build/*.br changed.)
+function buildVersion(dir: string): string {
+  let newest = 0;
+  const walk = (d: string) => {
+    for (const e of fs.readdirSync(d, { withFileTypes: true })) {
+      const p = path.join(d, e.name);
+      if (e.isDirectory()) walk(p);
+      else newest = Math.max(newest, fs.statSync(p).mtimeMs);
+    }
+  };
+  walk(dir);
+  const d = new Date(newest);
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return (
+    `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ` +
+    `${pad(d.getHours())}:${pad(d.getMinutes())}`
+  );
+}
+
+// DEV: stream a game's build straight from its repo folder, so the page (themed
+// wrapper or the build itself) can load it without a separate host.
+function serveGame(game: Game): Plugin {
+  const dir = gameDir(game);
   return {
-    name: "serve-vanguards-webgl",
+    name: `serve-${game.slug}-webgl`,
     configureServer(server) {
-      // connect strips the "/vanguards-build" mount prefix from req.url here.
-      server.middlewares.use("/vanguards-build", (req, res, next) => {
+      // connect strips this mount prefix from req.url below.
+      server.middlewares.use(`/${gameBase(game)}`, (req, res, next) => {
         try {
           let rel = decodeURIComponent((req.url ?? "/").split("?")[0]);
           if (rel === "/" || rel === "") rel = "/index.html";
 
-          // Synthesize version.json from the build's own timestamp so the
-          // loader's version check works locally (date = build date).
+          // Synthesize version.json from the build's timestamp (no file on disk).
           if (rel === "/version.json") {
-            const d = fs.statSync(path.join(VANGUARDS_DIR, "index.html")).mtime;
-            const pad = (n: number) => String(n).padStart(2, "0");
-            const build =
-              `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ` +
-              `${pad(d.getHours())}:${pad(d.getMinutes())}`;
             res.setHeader("Content-Type", "application/json");
             res.setHeader("Access-Control-Allow-Origin", "*");
-            res.end(JSON.stringify({ build }));
+            res.end(JSON.stringify({ build: buildVersion(dir) }));
             return;
           }
 
-          const filePath = path.join(VANGUARDS_DIR, rel);
+          const filePath = path.join(dir, rel);
           // Guard against path traversal outside the build folder.
-          if (!filePath.startsWith(VANGUARDS_DIR)) return next();
+          if (!filePath.startsWith(dir)) return next();
           if (!fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) {
             return next();
           }
@@ -88,45 +126,55 @@ function serveVanguards(): Plugin {
 //
 //   .br → ship AS-IS and declare `Content-Encoding: br` in netlify.toml. Netlify
 //         passes .br through untouched, so this is the smallest transfer and the
-//         browser decompresses it. (See the [[headers]] block in netlify.toml.)
+//         browser decompresses it. (See the [[headers]] blocks in netlify.toml.)
 //   .gz → DECODE at build to plain bytes. Netlify auto-decompresses .gz at its
 //         edge and ignores a manual Content-Encoding header, so a .gz can't be
 //         served intact; we gunzip it and ship the uncompressed file.
 //
-// Either way the spaced product name "Vanguards Build" is normalized to
-// "vanguards" so deployed URLs (and the netlify.toml header globs) stay simple.
-function vanguardsDeploy(name: string): {
-  deployed: string;
-  decode: (() => zlib.Gunzip) | null;
-} {
-  const ext = path.extname(name);
+// Either way the Unity product-name prefix (e.g. "Vanguards Build", "Gobspin
+// Build") is normalized to the slug so deployed URLs (and the netlify.toml
+// header globs) stay simple, lowercase, and space-free.
+function deployName(
+  file: string,
+  prefix: string,
+  slug: string,
+): { deployed: string; decode: (() => zlib.Gunzip) | null } {
+  const ext = path.extname(file);
   // Only .gz is decoded (extension dropped); .br and everything else ship as-is.
   const decode = ext === ".gz" ? () => zlib.createGunzip() : null;
-  const base = decode ? name.slice(0, -ext.length) : name;
-  return { deployed: base.replace("Vanguards Build", "vanguards"), decode };
+  const base = decode ? file.slice(0, -ext.length) : file;
+  return { deployed: base.split(prefix).join(slug), decode };
 }
 
-// PRODUCTION: copy the Unity WebGL build into dist/vanguards-build so the site
-// serves it same-origin (no CORS). The dev middleware above handles the same
-// path during `vite dev`; this handles `vite build`.
-function bundleVanguardsBuild(): Plugin {
+// PRODUCTION: copy a game's build into dist so the site serves it same-origin
+// (no CORS). The dev middleware handles the same path during `vite dev`; this
+// handles `vite build`.
+function bundleGame(game: Game): Plugin {
+  const dir = gameDir(game);
   return {
-    name: "bundle-vanguards-webgl",
+    name: `bundle-${game.slug}-webgl`,
     apply: "build",
     async writeBundle(options) {
       const outDir = options.dir ?? path.resolve(import.meta.dirname, "dist");
-      const dest = path.join(outDir, "vanguards-build");
+      const dest = path.join(outDir, gameBase(game));
 
-      if (!fs.existsSync(VANGUARDS_DIR)) {
+      if (!fs.existsSync(dir)) {
         this.warn(
-          `Vanguards build not found at "${VANGUARDS_DIR}" — skipping copy. ` +
-            "The deployed /vanguards page will have nothing to load.",
+          `Build "${game.dir}" not found — skipping. ` +
+            `The deployed /${game.slug} page will have nothing to load.`,
         );
         return;
       }
 
-      // Recursively copy, decoding the compressed Unity assets and normalizing
-      // their names. Collect the source→deployed renames to patch index.html.
+      // The asset filenames are prefixed with the Unity product name; derive it
+      // from the one *.loader.js so renames work for any game.
+      const loader = fs
+        .readdirSync(path.join(dir, "Build"))
+        .find((f) => f.endsWith(".loader.js"));
+      const prefix = loader ? loader.slice(0, -".loader.js".length) : game.dir;
+
+      // Recursively copy, decoding .gz assets and normalizing names. Collect the
+      // source→deployed renames to patch the references in index.html.
       const renames: Record<string, string> = {};
       const copyDir = async (from: string, to: string) => {
         fs.mkdirSync(to, { recursive: true });
@@ -136,7 +184,7 @@ function bundleVanguardsBuild(): Plugin {
             await copyDir(src, path.join(to, entry.name));
             continue;
           }
-          const { deployed, decode } = vanguardsDeploy(entry.name);
+          const { deployed, decode } = deployName(entry.name, prefix, game.slug);
           const out = path.join(to, deployed);
           if (decode) {
             await pipeline(
@@ -148,7 +196,7 @@ function bundleVanguardsBuild(): Plugin {
           if (deployed !== entry.name) renames[entry.name] = deployed;
         }
       };
-      await copyDir(VANGUARDS_DIR, dest);
+      await copyDir(dir, dest);
 
       // Rewrite the Unity template's asset references to the deployed names.
       const indexPath = path.join(dest, "index.html");
@@ -158,14 +206,10 @@ function bundleVanguardsBuild(): Plugin {
       }
       fs.writeFileSync(indexPath, html);
 
-      // version.json drives the loader's cache-busting ?v=; derive it from the
-      // build's timestamp, matching the dev middleware's synthesized value.
-      const d = fs.statSync(path.join(VANGUARDS_DIR, "index.html")).mtime;
-      const pad = (n: number) => String(n).padStart(2, "0");
-      const build =
-        `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ` +
-        `${pad(d.getHours())}:${pad(d.getMinutes())}`;
-      fs.writeFileSync(path.join(dest, "version.json"), JSON.stringify({ build }));
+      fs.writeFileSync(
+        path.join(dest, "version.json"),
+        JSON.stringify({ build: buildVersion(dir) }),
+      );
     },
   };
 }
@@ -174,12 +218,22 @@ export default defineConfig({
   // Multi-page app: serve real HTML files (e.g. /vanguards/) instead of
   // falling every route back to the main index.html like an SPA would.
   appType: "mpa",
-  plugins: [tailwindcss(), serveVanguards(), bundleVanguardsBuild()],
+  plugins: [
+    tailwindcss(),
+    ...GAMES.flatMap((game) => [serveGame(game), bundleGame(game)]),
+  ],
   build: {
     rollupOptions: {
       input: {
         main: path.resolve(import.meta.dirname, "index.html"),
-        vanguards: path.resolve(import.meta.dirname, "vanguards/index.html"),
+        // Only wrapper games have a Vite-processed loader page; direct games'
+        // index.html is the Unity build, copied verbatim by bundleGame.
+        ...Object.fromEntries(
+          GAMES.filter((game) => game.wrapper).map((game) => [
+            game.slug,
+            path.resolve(import.meta.dirname, `${game.slug}/index.html`),
+          ]),
+        ),
       },
     },
   },

@@ -4,9 +4,10 @@ node_modules/
 # Build output
 dist/
 
-# Vanguards Unity WebGL build (~97 MB) — served locally in dev, hosted
-# elsewhere for prod. Remove this line when intentionally committing it.
+# Unity WebGL builds — large binaries, served locally in dev and bundled into
+# dist for prod. Remove a line to intentionally commit that build.
 /Vanguards Build/
+/Gobspin Build/
 
 # Local env files
 .env

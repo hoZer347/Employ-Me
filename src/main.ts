@@ -30,6 +30,14 @@ app.innerHTML = `
               <path d="M7 17 17 7M9 7h8v8"/>
             </svg>
           </a>
+          <a href="/gobspin/" target="_blank" rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 rounded-lg px-5 py-2.5 font-medium text-sky-300 ring-1 ring-sky-400/50 transition hover:bg-sky-500/10 active:scale-95">
+            Play Gobspin
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" class="size-4">
+              <path d="M7 17 17 7M9 7h8v8"/>
+            </svg>
+          </a>
         </div>
       </div>
     </div>
