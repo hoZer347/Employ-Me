@@ -12,9 +12,9 @@ app.innerHTML = `
         <h1 class="text-4xl sm:text-6xl font-bold tracking-tight">
           Liam <span class="text-sky-400">Brown</span>
         </h1>
-        <p class="text-lg text-slate-300">Graphics &amp; Algorithms Developer</p>
+        <p class="text-lg text-slate-300">C++/C# Developer</p>
         <p class="max-w-md text-slate-400">
-          I write clear, concise, efficient C++, C# code. Rendering engines,
+          I write clear, concise, efficient C++/C# Code. Rendering engines,
           Algorithms, and Video Games. I build for work and for fun.
         </p>
         <div class="flex flex-wrap items-center justify-center gap-3">
