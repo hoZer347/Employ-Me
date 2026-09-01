@@ -14,8 +14,8 @@ app.innerHTML = `
         </h1>
         <p class="text-lg text-slate-300">Graphics &amp; Algorithms Developer</p>
         <p class="max-w-md text-slate-400">
-          I write clear, concise, efficient C++: rendering engines, graphics
-          pipelines, and the systems behind them. I build for work and for fun.
+          I write clear, concise, efficient C++, C# code. Rendering engines,
+          Algorithms, and Video Games. I build for work and for fun.
         </p>
         <div class="flex flex-wrap items-center justify-center gap-3">
           <button id="view-resume" type="button"
