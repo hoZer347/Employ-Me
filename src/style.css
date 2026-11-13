@@ -7,3 +7,22 @@
 html {
   background-color: #020617;
 }
+
+/* Some tabs scroll and some do not, so without a reserved gutter the scrollbar
+   appears and disappears on every switch and the centred column slides by half
+   its width. Scoped to the tabbed page (#app is only in index.html): this sheet
+   is shared with the other pages, which never scroll, so a gutter there would
+   be dead space down one side. */
+html:has(#app) {
+  scrollbar-gutter: stable;
+}
+
+/* The Main tab is one card centred in the space the header and the footer
+   leave over. The section has to be the flex item that grows, so the rule
+   lives here rather than in a utility class: a `flex` class on the section
+   would also beat Tailwind's `[hidden]` reset and show the panel on every
+   other tab. */
+#panel-main:not([hidden]) {
+  display: flex;
+  flex: 1;
+}

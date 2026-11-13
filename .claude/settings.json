@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"C:/Users/3hoze/Desktop/website/tools/check-leftovers.ps1\"",
+            "timeout": 20,
+            "statusMessage": "Checking for leftover tabs and servers"
+          }
+        ]
+      }
+    ]
+  }
+}

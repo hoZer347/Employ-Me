@@ -8,6 +8,13 @@ dist/
 # dist for prod. Remove a line to intentionally commit that build.
 /Vanguards Build/
 /Gobspin Build/
+/Trust No One Build/
+/Trust No One Full Build/
+/Brrreak it Down Build/
+
+# Loom's WebAssembly builds of its demos, produced by build-loom.sh. Same
+# story as the Unity builds: large, and regenerable.
+/Loom Demo Builds/
 
 # Local env files
 .env

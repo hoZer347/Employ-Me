@@ -47,6 +47,44 @@
     Content-Encoding = "br"
     Content-Type = "application/wasm"
 
+# Brrreak it Down is the build published on itch.io, mirrored here; Brotli too.
+[[headers]]
+  for = "/brrreak-it-down-build/Build/brrreak-it-down.data.br"
+  [headers.values]
+    Content-Encoding = "br"
+    Content-Type = "application/octet-stream"
+
+[[headers]]
+  for = "/brrreak-it-down-build/Build/brrreak-it-down.framework.js.br"
+  [headers.values]
+    Content-Encoding = "br"
+    Content-Type = "application/javascript"
+
+[[headers]]
+  for = "/brrreak-it-down-build/Build/brrreak-it-down.wasm.br"
+  [headers.values]
+    Content-Encoding = "br"
+    Content-Type = "application/wasm"
+
+# Loom's web build runs on pthreads, which need SharedArrayBuffer, which the
+# browser only hands to a cross-origin isolated page. The engine is framed, and
+# isolation only reaches a frame whose parent is isolated too, so every page
+# gets the pair. Netlify merges these with the per-path blocks above.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cross-Origin-Opener-Policy = "same-origin"
+    Cross-Origin-Embedder-Policy = "require-corp"
+
+# Text edits the host made in the page are stored here rather than in the
+# source modules, so they ship as data and have to revalidate. Netlify runs no
+# server, so /__edit/* is answered by nothing and this deploy is read-only: the
+# editor is only ever armed against a server on the machine hosting the site.
+[[headers]]
+  for = "/content-overrides.json"
+  [headers.values]
+    Cache-Control = "no-cache"
+
 # SPA fallback: serve index.html for any route so client-side
 # navigation works on direct loads / refreshes. Not forced, so the real
 # /vanguards-build/* and /gobspin-build/* static assets above are served

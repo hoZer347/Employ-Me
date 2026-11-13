@@ -1,0 +1,162 @@
+{
+  "#panel-gamejams/div:0/header:0/p:1": {
+    "html": "\n            Games built to a short deadline with a small group of developers.",
+    "original": "\n            Games built to a deadline, usually a weekend, usually with a team.\n            Each one is playable, on itch.io or right from here.\n          "
+  },
+  "#panel-gamejams/div:0/article:1/div:1/p:6": {
+    "html": "A psychedelic roguelike dungeon crawl played with three buttons: Trust, No, and One.",
+    "original": "A psychedelic roguelike dungeon crawl played with three buttons, where every encounter is a question of who you trust and who is about to betray you."
+  },
+  "#panel-gamejams/div:0/article:3/div:1/p:6": {
+    "html": "You are a vampire that progresses time as he moves, and can pick up vials to gain special attacks and more time. Try to survive as long as possible!",
+    "original": "Play Count Von Doune, a vampire who fights archers and werewolves with his dance moves. Keep the music going by collecting ketchup bottles and down as many enemies as you can."
+  },
+  "#panel-gamejams/div:0/article:5/div:1/p:6": {
+    "html": "This is a game where you are a Goblin, and you spin.",
+    "original": "You are a goblin, and you spin. Pull back to wind up a spin attack, release to launch, then click again to slow down and land a hero pose. Survive thirty seconds for a secret encounter."
+  },
+  "#panel-projects/div:0/header:0/p:1": {
+    "html": "\n            Stuff I work on for fun and my own interest.",
+    "original": "\n            The bigger builds, worked on outside of jams.\n          "
+  },
+  "#panel-projects/div:0/article:1/div:1/p:1": {
+    "html": "A turn-based, Fire Emblem inspired Tactical RPG. Fairly unpolished at the moment.",
+    "original": "Turn-based grid tactics in Unity. Every action is a state on a custom machine, so a whole battle can rewind and replay a turn at a time. Fog of war, scripted dialogue, units defined in data."
+  },
+  "#panel-tools/div:0/article:1/header:0/p:1": {
+    "html": "The Basis for a new way of Coding in Unity, where everything is managed by State Machines",
+    "original": "The spine of the toolkit. States are plain serialized objects, and one pump runs all of them."
+  },
+  "#panel-tools/div:0/header:0/p:1": {
+    "html": "\n            A Game Development Toolkit I use for all of my projects. Works in Unity and Godot",
+    "original": "\n            The Unity toolkit I carry between projects. Every game here runs on\n            some version of it.\n          "
+  },
+  "#panel-tools/div:0/article:3/header:0/p:1": {
+    "html": "A text streaming wrapper that pipes text with inline bindings into Text Meshes for use in dialogue boxes",
+    "original": "A text script compiles into a queue of states, streamed a character at a time."
+  },
+  "#panel-tools/div:0/article:3/ul:1/li:0/span:1": {
+    "html": "Streams text directly from a text file.",
+    "original": "Written as a plain text asset. Rich text, pauses and speed changes are commands in the body, and each one compiles to a state the machine runs in order."
+  },
+  "#panel-tools/div:0/article:3/ul:1/li:1/span:1": {
+    "html": "Programmable bindings with the [Command, arg1, arg2] bindings that work directly when they are called while streaming",
+    "original": "Any method tagged [DialogueBinding] is callable from the script by name, with arguments, so a line can open a shop or start a fight without its own parser."
+  },
+  "#panel-tools/div:0/article:3/ul:1/li:2/span:1": {
+    "html": "Integration with TextMeshProUGUI rich text modifiers such as &lt;b&gt;&lt;/b&gt;",
+    "original": "Banjo-Kazooie style voice: a short blip pitched at random, thinned to every Nth character, routed through whatever volume dial the game hands it."
+  },
+  "#panel-tools/div:0/article:5/header:0/p:1": {
+    "html": "A code-first shader-managed sprite manager that offers more control over how a sprite is managed",
+    "original": "A SpriteRenderer replacement that animates in the shader and measures the sheet itself."
+  },
+  "#panel-tools/div:0/article:5/ul:1/li:0/span:1": {
+    "html": "Frames come off a shared clock in the fragment shader. Custom offsets are also available for Desync",
+    "original": "Frames come off a shared clock in the fragment shader. Two sprites at the same rate stay in phase, and the CPU ticks nothing."
+  },
+  "#panel-tools/div:0/article:5/ul:1/li:1/span:1": {
+    "html": "A scanner that can automatically subdivide sprites into animation frames",
+    "original": "A scanner reads the sheet's pixels for clip lengths and for the box the art actually fills, so pivots land on the feet and padding never lifts a character off the floor."
+  },
+  "#panel-tools/div:0/article:5/ul:1/li:2/span:1": {
+    "html": "Billboarding also managed in-shader for maximized performance",
+    "original": "Camera-facing quads with a real projected shadow and a single-pass outline. One mesh, one material, per-sprite values riding in a MaterialPropertyBlock."
+  },
+  "#panel-tools/div:0/article:1/ul:1/li:0/span:1": {
+    "html": "A state is a class that can be lined up and executed in order, as well as reversed and serialized for debugging",
+    "original": "A state is a plain class with its own fields, not a scriptable object or a graph node. The inspector configures it inline, on whichever machine runs it."
+  },
+  "#panel-tools/div:0/article:1/ul:1/li:1/span:1": {
+    "html": "Can maintain a working history of states, and flush the queue into a text file for debugging",
+    "original": "One core pump, three bases: a MonoBehaviour machine, a FishNet networked twin, and a static one that boots itself into DontDestroyOnLoad before the first scene."
+  },
+  "#panel-tools/div:0/article:1/ul:1/li:2/span:1": {
+    "html": "NetStateMachine implements the FishNet library to provide netcode-ready StateMachine as well",
+    "original": "Editor side: a Create menu that writes new states from a template, a shared inspector, and a monitor window listing every live machine with its state, its queue and its history."
+  },
+  "#panel-tools/div:0/article:11/header:0/p:1": {
+    "html": "Convenience classes for common desired features in a game",
+    "original": "The small pieces every project ends up wanting."
+  },
+  "#panel-tools/div:0/article:11/ul:1/li:1/span:1": {
+    "html": "SpeedManager: A speed and acceleration manager for action games",
+    "original": "Gait and SpeedManager: a gait is one movement style, a max speed and an acceleration. The manager moves a transform toward it, and applies friction on the way back down."
+  },
+  "#panel-tools/div:0/article:11/ul:1/li:0/span:1": {
+    "html": "Duration: A struct timer that ticks on delta time and reports when it has run out, optionally at a multiple of real time.",
+    "original": "Duration: a struct timer that ticks on delta time and reports when it has run out, optionally at a multiple of real time."
+  },
+  "#panel-tools/div:0/article:7/header:0/p:1": {
+    "html": "Dynamically lambda-managed variables with a custom inspector editor",
+    "original": "A stat is a base value plus a stack of modifiers that can explain itself."
+  },
+  "#panel-tools/div:0/article:7/ul:1/li:0/span:1": {
+    "html": "Can represent a stat on an RPG character, something like Strength, Magic, etc.",
+    "original": "Modifiers are serializable objects applied in order, so a buff, a piece of gear and a difficulty setting stack without anyone writing the arithmetic twice."
+  },
+  "#panel-tools/div:0/article:7/ul:1/li:1/span:1": {
+    "html": "Recalculates on each added modifier to represent buffs / debuffs",
+    "original": "Recalculates either on read or on change, whichever suits how often the stat gets asked for."
+  },
+  "#panel-tools/div:0/article:7/ul:1/li:2/span:1": {
+    "html": "A custom inspector implementation that requires no user setup. Add Attribute&lt;int&gt; and it just works!",
+    "original": "A drawer puts the base, the stack and the result on one inspector line. A reflection helper lists every stat on an object, so a readout picks up new ones with no second list to maintain."
+  },
+  "#panel-tools/div:0/article:9/ul:1/li:0/span:1": {
+    "html": "Pipeline to do automated playtesting runs in a hidden windows desktop so it doesn't steal your caret",
+    "original": "Every run gets its own numbered copy, so a playtest never touches the working tree and two runs never fight over Unity's project lock."
+  },
+  "#panel-tools/div:0/article:9/ul:1/li:1/span:1": {
+    "html": "Works with StateMachines to record and present results",
+    "original": "The editor opens on a separate Win32 desktop, where a window has no foreground to steal and can't take the keyboard away."
+  },
+  "#panel-tools/div:0/article:9/ul:1/li:2/span:1": {
+    "html": "A batchmode compile runs first, so a broken tree comes back as error lines instead of a modal dialogue nobody is there to answer.",
+    "original": "A batchmode compile runs first, so a broken tree comes back as error lines instead of a modal dialog nobody is there to answer."
+  },
+  "#panel-draftleague/div:0/div:2/div:0/p:1": {
+    "html": "This doesn't work like a normal draft league. Players Pick a Tier (S, A, B, C), then they are given a random selection of pokemon to choose for the Tier. This encourages building teams from pokemon you would have never considered before",
+    "original": "A coach picks a tier, not a Pokemon: the server offers a random sample of what is left in that tier and the coach takes one of those. The sample is cached per turn, so nobody can refresh until they like it. One background clock compares each draft's persisted deadline to the wall clock, so the timer survives a server restart and auto-picks for whoever went quiet."
+  },
+  "#panel-draftleague/div:0/div:2/div:1/h3:0": {
+    "html": "Meticulous Stat Tracking",
+    "original": "Season and standings"
+  },
+  "#panel-draftleague/div:0/div:2/div:1/p:1": {
+    "html": "A custom replay scraper parses replays of battles played. Numerous stats are tracked, including KOs, Faints, damage dealt / healed, and even presence (the amount of turns a pokemon is present for.",
+    "original": "When the draft closes the server lays down a full single round-robin, byes included for an odd roster. Standings, records, KO differentials and weekly MVPs all fall out of the reported results, so nothing is kept by hand."
+  },
+  "#panel-draftleague/div:0/div:2/div:2/h3:0": {
+    "html": "Custom Showdown Server",
+    "original": "Real battles"
+  },
+  "#panel-draftleague/div:0/div:2/div:2/p:1": {
+    "html": "I host a custom pokemon showdown server in order to record and host battles. This streamlines the formerly tedious process of posting replays, and hand-recording data.",
+    "original": "Games are played on a private Pokemon Showdown server in a custom format whose validator fetches each coach's drafted roster and rejects anything they do not own. Finished battles POST their log back, which scores the fixture and updates the season."
+  },
+  "#panel-draftleague/div:0/div:2/div:3/h3:0": {
+    "html": "The Stack",
+    "original": "Stats from the replays"
+  },
+  "#panel-draftleague/div:0/div:2/div:3/p:1": {
+    "html": "ASP.NET Core 9 with EF Core over SQLite for the API, the draft engine and a SignalR hub. The frontend is plain HTML, CSS and JavaScript with no build step. The battle side is a Node service wrapping a real Showdown build, plus a self-hosted Pokemon Showdown client and teambuilder.",
+    "original": "A scraper walks every battle log and attributes each effect to a source: direct hits, hazards, status chip, weather, recoil, Destiny Bond, absorb healing. That becomes a sortable per-mon table of KOs, faints, damage, presence and win rate."
+  },
+  "#panel-draftleague/div:0/header:0/p:1": {
+    "html": "My self-hosted Pokemon Draft League website that I run and maintain for my friends!",
+    "original": "A self-hosted platform that runs a Pokemon draft league end to end: a snake draft on a live clock, a round-robin season, real battles on a private Pokemon Showdown server, and per-mon stats scraped out of every replay."
+  },
+  "#panel-gamejams/div:0/article:1/div:1/p:5": {
+    "html": "\n         #9 overall",
+    "original": "\n         Top 16 most popular (placement pending)\n       "
+  },
+  "#panel-resume/div:0/p:1": {
+    "html": "C++ / C# engineer with 3 years in industry with experience in QA and testing. My strengths are algorithms, computational geometry, and real-time rendering, multithreaded systems, and network tools.",
+    "original": "C++ / C# engineer with 3 years in industry on core algorithms, computational geometry, and QA and testing infrastructure. Real-time rendering, multithreaded systems, and networked tools."
+  },
+  "#panel-engine/div:0/header:0/p:1": {
+    "html": "A Multi-Threaded Game Engine and Editor written from scratch in C++. Supports OpenGL and Vulkan, and runs on Windows, Linux and on the Browser",
+    "original": "A game engine and editor written from scratch in C++. OpenGL on desktop, WebGL in the browser."
+  }
+}
