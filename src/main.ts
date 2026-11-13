@@ -4,7 +4,7 @@ import { withSiteEdits } from "./resume-edits";
 import { gameCardHTML } from "./game-embed";
 import { wireGalleries } from "./gallery";
 import { draftLeagueSectionHTML } from "./draft-league";
-import { JAM_GAMES, PERSONAL_PROJECTS } from "./games";
+import { JAM_GAMES } from "./games";
 import { TOOLS, toolCardHTML } from "./tools";
 import { DEMOS, DEMOS_BASE, ENGINE, SHADER_DEMOS } from "./engine";
 import { mountEngineFrame } from "./engine-frame";
@@ -12,7 +12,7 @@ import { COLORS } from "./glsl";
 import { attachShaderEditor } from "./shader-editor";
 import { loadOverrides, mountEditor } from "./editable";
 
-// The site is seven tabs over one page. The toolbar swaps which panel is shown
+// The site is six tabs over one page. The toolbar swaps which panel is shown
 // and the hash records it, so a reload or a shared link lands on the same tab.
 const TABS = [
   { id: "main", label: "Main" },
@@ -22,7 +22,6 @@ const TABS = [
   { id: "resume", label: "Resume" },
   { id: "engine", label: "Engine" },
   { id: "gamejams", label: "Game Jams" },
-  { id: "projects", label: "Personal Projects" },
   { id: "tools", label: "Tools" },
   { id: "draftleague", label: "Draft League" },
 ] as const;
@@ -42,9 +41,9 @@ const app = document.querySelector<HTMLDivElement>("#app")!;
 // the viewport instead of below the fold.
 app.className = "flex min-h-screen flex-col";
 
-// Seven tabs no longer fit a row at the old size, and a toolbar that wraps
+// Six tabs no longer fit a row at the old size, and a toolbar that wraps
 // pushes the page down by a line, so the row stays one row: tighter buttons,
-// and a scroll rather than a second line on a screen too narrow for all seven.
+// and a scroll rather than a second line on a screen too narrow for all six.
 const toolbarTabs = TABS.map(
   (tab) => `
     <button type="button" data-tab="${tab.id}"
@@ -118,20 +117,6 @@ app.innerHTML = `
           </p>
         </header>
         ${JAM_GAMES.map(gameCardHTML).join('<hr class="border-white/10">')}
-      </div>`,
-    )}
-
-    ${panel(
-      "projects",
-      `
-      <div class="space-y-8 rounded-2xl bg-slate-950/40 px-8 py-10 ring-1 ring-white/10 backdrop-blur-xs">
-        <header class="space-y-2">
-          <h2 class="text-xs font-semibold uppercase tracking-widest text-sky-400">Personal Projects</h2>
-          <p class="text-slate-300">
-            The bigger builds, worked on outside of jams.
-          </p>
-        </header>
-        ${PERSONAL_PROJECTS.map(gameCardHTML).join('<hr class="border-white/10">')}
       </div>`,
     )}
 

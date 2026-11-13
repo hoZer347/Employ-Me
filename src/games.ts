@@ -100,19 +100,7 @@ export const JAM_GAMES: readonly Game[] = [
   },
 ];
 
-// Longer-running projects of my own. The Personal Projects tab lists these.
-export const PERSONAL_PROJECTS: readonly Game[] = [
-  {
-    slug: "vanguards",
-    title: "Vanguards",
-    tagline:
-      "Turn-based grid tactics in Unity. Every action is a state on a custom machine, so a whole battle can rewind and replay a turn at a time. Fog of war, scripted dialogue, units defined in data.",
-    shots: [],
-    version: "2026-06-11 19:21",
-  },
-];
-
-export const GAMES: readonly Game[] = [...JAM_GAMES, ...PERSONAL_PROJECTS];
+export const GAMES: readonly Game[] = JAM_GAMES;
 
 export function gameBySlug(slug: string): Game {
   const game = GAMES.find((g) => g.slug === slug);

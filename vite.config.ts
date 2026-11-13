@@ -26,7 +26,6 @@ interface Game {
   live?: boolean;
 }
 export const GAMES: Game[] = [
-  { slug: "vanguards", dir: "Vanguards Build", wrapper: true },
   { slug: "gobspin", dir: "Gobspin Build", wrapper: true },
   { slug: "trust-no-one", dir: "Trust No One Build", wrapper: true },
   { slug: "brrreak-it-down", dir: "Brrreak it Down Build", wrapper: true },
@@ -153,8 +152,8 @@ function serveGame(game: Game): Plugin {
 //         A live build skips that: only serve-site.cjs serves it, and Netlify
 //         never has its folder.
 //
-// Either way the Unity product-name prefix (e.g. "Vanguards Build", "Gobspin
-// Build") is normalized to the slug so deployed URLs (and the netlify.toml
+// Either way the Unity product-name prefix (e.g. "Gobspin Build", "Trust
+// No One Build") is normalized to the slug so deployed URLs (and the netlify.toml
 // header globs) stay simple, lowercase, and space-free.
 // Extensions Unity uses for compressed output. ".unityweb" is the default WebGL
 // asset naming and ".gz" comes from the decompression-fallback-off variant. A
@@ -439,7 +438,7 @@ function isolate(): Plugin {
 }
 
 export default defineConfig({
-  // Multi-page app: serve real HTML files (e.g. /vanguards/) instead of
+  // Multi-page app: serve real HTML files (e.g. /gobspin/) instead of
   // falling every route back to the main index.html like an SPA would.
   appType: "mpa",
   plugins: [
