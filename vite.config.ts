@@ -31,6 +31,8 @@ export const GAMES: Game[] = [
   { slug: "brrreak-it-down", dir: "Brrreak it Down Build", wrapper: true },
   // Trust No One with the artist kit on, straight out of the game's own build folder.
   { slug: "tno-artist", dir: "../Brackeys GameJam/Build/Artist", wrapper: false, live: true },
+  // SHIFT, framed by the unlinked loomhozer.ca#SHIFT page in src/shift.ts.
+  { slug: "shift", dir: "SHIFT Build", wrapper: false, live: true },
 ];
 export const gameDir = (game: Game) => path.resolve(import.meta.dirname, game.dir);
 // Where the build is served/emitted: a sibling /<slug>-build for wrapper games

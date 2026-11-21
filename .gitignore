@@ -11,6 +11,7 @@ dist/
 /Trust No One Build/
 /Trust No One Full Build/
 /Brrreak it Down Build/
+/SHIFT Build/
 
 # Loom's WebAssembly builds of its demos, produced by build-loom.sh. Same
 # story as the Unity builds: large, and regenerable.
