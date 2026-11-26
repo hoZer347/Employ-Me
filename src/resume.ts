@@ -25,7 +25,7 @@ export const resume = {
       org: "Kinaxis",
       period: "Apr 2025 - Jun 2026",
       points: [
-        "Built unit and regression test suites for core C++ supply chain planning algorithms.",
+        "Built unit and regression test suites for core C++ supply chain planning algorithms in an Agile Scrum team.",
         "Debugged memory errors in a large multithreaded C++ codebase with sanitizers and profilers, on a team that shipped zero unforgivable defects for a full year.",
         "Built internal LLM agents for developer tooling that cut defect analysis from a day to an hour.",
       ],
@@ -45,7 +45,7 @@ export const resume = {
       org: "Corel",
       period: "Apr 2022 - Apr 2023",
       points: [
-        "Shipped clipboard and data interchange features in CorelDRAW, a C++ desktop application.",
+        "Shipped clipboard and data interchange features in CorelDRAW, a C++ desktop application, in Agile sprints.",
         "Integrated the WebP codec into the imaging pipeline and designed a non-destructive layer model.",
         "Fixed leaks and crashes with Visual Studio profiling.",
       ],
@@ -100,7 +100,7 @@ export const resume = {
     Graphics: "OpenGL, real-time rendering, shader programming, CUDA, RenderDoc, computational geometry",
     Systems: "Multithreading, memory management, profiling, performance optimization",
     Networking: "TCP / UDP, sockets, client-server, Emscripten / WebAssembly",
-    Tools: "Visual Studio, Git, CMake, Unity, CI/CD, unit testing, debugging, LLM agents",
+    Tools: "Visual Studio, Git, CMake, Unity, CI/CD, unit testing, debugging, Agile / Scrum, LLM agents",
   },
   interests: "LeetCode · music composition · games · D&D",
 } as const;
