@@ -33,6 +33,8 @@ export const GAMES: Game[] = [
   { slug: "tno-artist", dir: "../Brackeys GameJam/Build/Artist", wrapper: false, live: true },
   // SHIFT, framed by the unlinked loomhozer.ca#SHIFT page in src/shift.ts.
   { slug: "shift", dir: "SHIFT Build", wrapper: false, live: true },
+  // Trust No One as last built, framed by the unlinked loomhozer.ca#trustnoone page in src/trustnoone.ts.
+  { slug: "trustnoone", dir: "../Brackeys GameJam/Build/WebGL", wrapper: false, live: true },
 ];
 export const gameDir = (game: Game) => path.resolve(import.meta.dirname, game.dir);
 // Where the build is served/emitted: a sibling /<slug>-build for wrapper games

@@ -1,15 +1,18 @@
-// Picks which page this load is. loomhozer.ca#SHIFT is a page nothing links
-// to, so it is only reached by typing it; every other hash is the site as it
-// always was. Crossing into or out of it reloads, so neither page has to tear
-// the other down.
+// Picks which page this load is. Each hidden hash is a page nothing links to,
+// so it is only reached by typing it; every other hash is the site as it
+// always was. Crossing into or out of one reloads, so no page has to tear
+// another down.
 
-const SECRET_HASH = "#SHIFT";
+const HIDDEN_PAGES: Record<string, () => Promise<unknown>> = {
+  "#SHIFT": () => import("./shift"),
+  "#trustnoone": () => import("./trustnoone"),
+};
 
-const isSecret = () => location.hash === SECRET_HASH;
-const secret = isSecret();
+const hiddenPage = () => HIDDEN_PAGES[location.hash];
+const page = hiddenPage();
 
 window.addEventListener("hashchange", () => {
-  if (isSecret() !== secret) location.reload();
+  if (hiddenPage() !== page) location.reload();
 });
 
-void (secret ? import("./shift") : import("./main"));
+void (page ? page() : import("./main"));
